@@ -7,20 +7,22 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=3cd96fedaeaeb7aee5da5f747c337ea0"
 SRC_URI = "file://cat-guardian-0.1.tar.gz"
 SRC_URI[sha256sum] = "71c4bea0fedea64c6c0b833a0d2c657eb5a81651287443115211f9ec0598d138"
 
+EXTRA_OEMAKE = " \
+    -C ${S} \
+    BUILD_DIR=${B} \
+    'CC=${CC}' \
+    'CPPFLAGS=${CPPFLAGS}' \
+    'CFLAGS=${CFLAGS}' \
+    'LDFLAGS=${LDFLAGS}' \
+"
+
 inherit systemd
 
 SYSTEMD_SERVICE:${PN} = "cat-guardian.service"
 SYSTEMD_AUTO_ENABLE:${PN} = "enable"
 
 do_compile() {
-    oe_runmake \
-        -C ${S} \
-        BUILD_DIR="${B}" \
-        CC="${CC}" \
-        CPPFLAGS="${CPPFLAGS}" \
-        CFLAGS="${CFLAGS}" \
-        LDFLAGS="${LDFLAGS}" \
-        all
+    oe_runmake
 }
 
 do_install() {
