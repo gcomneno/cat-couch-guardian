@@ -4,7 +4,10 @@ DESCRIPTION = "Hardware-independent Cat Couch Guardian core with simulated motio
 # Private development PoC: no redistribution license is granted at this stage.
 LICENSE = "CLOSED"
 
-inherit externalsrc systemd
+SRC_URI = "file://cat-guardian-0.1.tar.gz"
+SRC_URI[sha256sum] = "5da43633703e3be98de949a6a0214d90065a2cd23a9517df6ad2db47daafd0f7"
+
+inherit systemd
 
 SYSTEMD_SERVICE:${PN} = "cat-guardian.service"
 SYSTEMD_AUTO_ENABLE:${PN} = "enable"
