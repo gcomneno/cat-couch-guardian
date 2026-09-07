@@ -1,11 +1,11 @@
-SUMMARY = "Cat Couch Guardian virtual-first proof of concept"
-DESCRIPTION = "Hardware-independent Cat Couch Guardian core with simulated motion input and deterministic evidence output."
+SUMMARY = "Cat Couch Guardian educational virtual-first proof of concept"
+DESCRIPTION = "Educational hardware-independent Cat Couch Guardian core with simulated motion input and deterministic evidence output."
 
-# Private development PoC: no redistribution license is granted at this stage.
-LICENSE = "CLOSED"
+LICENSE = "MIT"
+LIC_FILES_CHKSUM = "file://LICENSE;md5=3cd96fedaeaeb7aee5da5f747c337ea0"
 
 SRC_URI = "file://cat-guardian-0.1.tar.gz"
-SRC_URI[sha256sum] = "5da43633703e3be98de949a6a0214d90065a2cd23a9517df6ad2db47daafd0f7"
+SRC_URI[sha256sum] = "71c4bea0fedea64c6c0b833a0d2c657eb5a81651287443115211f9ec0598d138"
 
 inherit systemd
 
