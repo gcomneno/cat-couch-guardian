@@ -1,0 +1,18 @@
+# Yocto workspace and generated build state
+/yocto/
+
+# Local runtime/build evidence.
+# Canonical evidence hashes belong in tracked manifests/docs, not raw build trees.
+/evidence/
+
+# Host application build products
+/app/cat-guardian/build/
+
+# externalsrc helper symlinks/files created by BitBake
+/app/cat-guardian/oe-workdir
+/app/cat-guardian/oe-logs
+
+# Generic editor / temporary files
+*~
+*.swp
+*.swo
