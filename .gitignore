@@ -16,3 +16,10 @@
 *~
 *.swp
 *.swo
+
+# Yocto/download/build state: reproducible or machine-local, not product source.
+/build-logs/
+/downloads/
+/experiments/
+/sstate-cache/
+/tools/
