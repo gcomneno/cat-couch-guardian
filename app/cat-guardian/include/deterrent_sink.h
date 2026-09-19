@@ -1,11 +1,11 @@
-#ifndef CAT_GUARDIAN_EVIDENCE_SINK_H
-#define CAT_GUARDIAN_EVIDENCE_SINK_H
+#ifndef CAT_GUARDIAN_DETERRENT_SINK_H
+#define CAT_GUARDIAN_DETERRENT_SINK_H
 
 #include "deterrent_request.h"
 
-struct evidence_sink {
+struct deterrent_sink {
     void *context;
-    int (*record_deterrent_request)(
+    int (*submit)(
         void *context,
         const struct deterrent_request *request
     );

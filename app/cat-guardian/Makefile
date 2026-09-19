@@ -14,6 +14,7 @@ COMMON_SOURCES := \
 APP_SOURCES := \
 	$(COMMON_SOURCES) \
 	src/simulated_motion_source.c \
+	src/simulated_deterrent_sink.c \
 	src/main.c
 
 TEST_SOURCES := \
@@ -38,7 +39,7 @@ test: $(TEST)
 
 check: all test
 	test "$$($(APP))" = \
-		"evidence type=motion source=simulated sequence=1"
+		"evidence type=deterrent-request trigger=motion source=simulated sequence=1"
 
 clean:
 	rm -rf $(BUILD_DIR)
