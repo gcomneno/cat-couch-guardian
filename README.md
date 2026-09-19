@@ -32,32 +32,43 @@ speakers, or networking.
 
 ## Current Maturity
 
-M0.5 is PASS and FROZEN.
+M0.6 host behavior is implemented and verified. M0.5 remains the frozen
+previous milestone.
 
-The implemented flow is:
+The implemented M0.6 flow is:
 
 ```text
-SimulatedMotionSource -> motion event -> hardware-independent core -> deterministic evidence
+SimulatedMotionSource
+-> motion event
+-> hardware-independent core
+-> semantic deterrent request
+-> simulated deterrent sink
+-> deterministic evidence
 ```
 
 The exact output is:
 
 ```text
-evidence type=motion source=simulated sequence=1
+evidence type=deterrent-request trigger=motion source=simulated sequence=1
 ```
 
-The core boundary is intentional: the core receives events and does not know
-their origin. Simulated input is an adapter outside the core.
+The core remains hardware-independent. It expresses a semantic deterrent
+request and does not know whether a future physical adapter uses audio or
+another actuator. The current deterrent adapter is simulated and performs no
+physical action.
 
 ## Architecture
 
 The application is a small C11 program with explicit boundaries:
 
 - `SimulatedMotionSource` emits a deterministic motion event.
-- The hardware-independent core receives a motion event through its public
-  boundary.
-- The evidence path writes the deterministic record used by host tests and
-  target validation.
+- The hardware-independent core converts that event into one semantic
+  `deterrent_request`.
+- The request is submitted through the hardware-independent `deterrent_sink`
+  port.
+- The simulated deterrent adapter accepts the request without physical
+  actuation.
+- Evidence is recorded only after successful deterrent submission.
 
 This keeps hardware origin, operating-system integration, and deterministic
 core behavior separate enough to teach ports and adapters without introducing
@@ -79,7 +90,7 @@ The verified runtime result was:
 
 ## Current Exclusions
 
-The following are intentionally out of scope for M0.5:
+The following remain intentionally out of scope for M0.6:
 
 - GPIO;
 - physical PIR;
@@ -138,7 +149,7 @@ make check
 verifies the exact application output:
 
 ```text
-evidence type=motion source=simulated sequence=1
+evidence type=deterrent-request trigger=motion source=simulated sequence=1
 ```
 
 ## Yocto Layer and Image
@@ -215,17 +226,35 @@ release preparation. The public archive is regenerated from the distributable
 `app/cat-guardian` tree, includes the MIT license, and has its own recipe
 checksum.
 
-## M0.6 Roadmap
+## M0.6 Source Archive
 
-The next educational milestone is expected to introduce a simulated deterrent
-boundary, such as `TestAudioSink`, while preserving the hardware-independent
-core. The intended direction is:
+The Yocto source archive for M0.6 is generated directly from the committed
+`app/cat-guardian` tree at host checkpoint `2050fea`.
+
+This excludes host build products and unrelated working-tree state by
+construction.
+
+Previous pinned public archive:
 
 ```text
-motion -> event -> deterrent request -> evidence
+71c4bea0fedea64c6c0b833a0d2c657eb5a81651287443115211f9ec0598d138
 ```
 
-M0.6 is future work and is not implemented in M0.5.
+M0.6 pinned archive:
+
+```text
+b7fcd728404145305b8bb1a198441b1827a2ed83547736031e8d4381a3e964d5
+```
+
+The Yocto recipe pins this exact SHA-256 identity.
+
+## Future Physical Adapters
+
+Physical actuation remains future work. A later adapter may use audio or
+another actuator, but that implementation choice remains outside the semantic
+`deterrent_sink` contract.
+
+M0.6 itself remains simulated, educational, and hardware-free.
 
 ## License
 

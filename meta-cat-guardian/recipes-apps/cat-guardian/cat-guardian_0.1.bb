@@ -1,11 +1,11 @@
 SUMMARY = "Cat Couch Guardian educational virtual-first proof of concept"
-DESCRIPTION = "Educational hardware-independent Cat Couch Guardian core with simulated motion input and deterministic evidence output."
+DESCRIPTION = "Educational hardware-independent Cat Couch Guardian core with simulated motion input, a semantic deterrent-request boundary, and deterministic evidence output."
 
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=3cd96fedaeaeb7aee5da5f747c337ea0"
 
 SRC_URI = "file://cat-guardian-0.1.tar.gz"
-SRC_URI[sha256sum] = "71c4bea0fedea64c6c0b833a0d2c657eb5a81651287443115211f9ec0598d138"
+SRC_URI[sha256sum] = "b7fcd728404145305b8bb1a198441b1827a2ed83547736031e8d4381a3e964d5"
 
 EXTRA_OEMAKE = " \
     -C ${S} \
