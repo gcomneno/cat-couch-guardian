@@ -100,29 +100,39 @@ The derived image and QEMU validation prove that the package can exist in an ARM
 
 Keep these claims separate. Good engineering evidence says exactly what was tested.
 
-## M0.7 — Reactive Behavior
+## M0.7 — Deterministic Cooldown State
 
-The next recommended functional lesson is a small stateful policy such as cooldown.
+M0.7 introduces the first explicit state machine in the core.
 
-Example intent:
+Contract:
 
 ```text
-motion
--> decision: allow or suppress
--> deterrent request only when allowed
--> evidence describing the decision
+motion event + observed_at_ms
+-> core cooldown policy
+-> ALLOW: deterrent request -> success evidence
+-> SUPPRESS: no deterrent request -> suppression evidence
 ```
 
-The educational goal is not merely to add a timer. It is to introduce controlled state while preserving deterministic tests and keeping time/hardware behind explicit boundaries.
+The state is explicit in `struct cat_guardian_state` and contains the cooldown
+duration plus the timestamp of the last successful deterrent action.
 
-Before implementing M0.7, define:
+The rule is exact:
 
-- the state owned by the core;
-- the input needed to make a decision;
-- the exact suppression rule;
-- deterministic time representation for tests;
-- evidence for both allowed and suppressed events;
-- failure behavior.
+- the first valid event is allowed;
+- elapsed time strictly less than `cooldown_ms` is suppressed;
+- elapsed time exactly equal to `cooldown_ms` is allowed;
+- elapsed time greater than `cooldown_ms` is allowed;
+- a timestamp earlier than the last successful deterrent is invalid input.
+
+The timestamp enters as event data. The core does not read a wall clock and the
+tests never sleep.
+
+A deterrent failure does not start cooldown. Once deterrence succeeds, cooldown
+state advances before success evidence is recorded. Therefore an evidence
+failure does not make the core repeat an already successful deterrent action.
+
+This is the key M0.7 lesson: application state must describe what actually
+happened, not merely whether telemetry/evidence succeeded.
 
 ## Later Milestones
 
