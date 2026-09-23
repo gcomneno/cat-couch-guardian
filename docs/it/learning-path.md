@@ -100,29 +100,40 @@ L'immagine derivata e la validazione QEMU provano che il package può esistere i
 
 Mantieni separate queste affermazioni. Una buona engineering evidence dice esattamente cosa è stato testato.
 
-## M0.7 — Comportamento reattivo
+## M0.7 — Stato di cooldown deterministico
 
-La prossima lezione funzionale consigliata è una piccola policy stateful come il cooldown.
+M0.7 introduce la prima state machine esplicita nel core.
 
-Intento di esempio:
+Contratto:
 
 ```text
-motion
--> decision: allow or suppress
--> deterrent request only when allowed
--> evidence describing the decision
+motion event + observed_at_ms
+-> core cooldown policy
+-> ALLOW: deterrent request -> success evidence
+-> SUPPRESS: no deterrent request -> suppression evidence
 ```
 
-L'obiettivo didattico non è semplicemente aggiungere un timer. È introdurre stato controllato preservando test deterministici e mantenendo tempo/hardware dietro confini espliciti.
+Lo stato è esplicito in `struct cat_guardian_state` e contiene la durata del
+cooldown insieme al timestamp dell'ultima azione di deterrenza riuscita.
 
-Prima di implementare M0.7, definisci:
+La regola è precisa:
 
-- lo stato posseduto dal core;
-- l'input necessario per prendere una decisione;
-- la regola esatta di soppressione;
-- una rappresentazione deterministica del tempo per i test;
-- evidence sia per eventi consentiti sia per eventi soppressi;
-- comportamento in caso di errore.
+- il primo evento valido è consentito;
+- un elapsed time strettamente minore di `cooldown_ms` viene soppresso;
+- un elapsed time esattamente uguale a `cooldown_ms` viene consentito;
+- un elapsed time maggiore di `cooldown_ms` viene consentito;
+- un timestamp precedente all'ultima deterrenza riuscita è input non valido.
+
+Il timestamp entra come dato dell'evento. Il core non legge un wall clock e i
+test non usano mai sleep.
+
+Un errore di deterrenza non avvia il cooldown. Quando la deterrenza ha successo,
+lo stato del cooldown avanza prima di registrare la success evidence. Quindi un
+errore di evidence non porta il core a ripetere un'azione di deterrenza già
+riuscita.
+
+Questa è la lezione chiave di M0.7: lo stato applicativo deve descrivere ciò che
+è realmente accaduto, non soltanto se telemetria/evidence ha avuto successo.
 
 ## Milestone successivi
 
