@@ -95,36 +95,32 @@ Specify only:
 
 Then explain why none of those details belong in `deterrent_request.h`.
 
-## Exercise 7 — Design M0.7 Cooldown
+## Exercise 7 — Read the M0.7 Cooldown Contract
 
-Current behavior can request deterrence for every accepted motion event.
+Inspect `struct cat_guardian_state`, `motion_event.observed_at_ms`, and
+`cat_guardian_handle_motion()`.
 
-Design a deterministic cooldown rule.
+Before reading the tests, predict the outcome for:
 
-Example questions:
+- no previous deterrent;
+- elapsed time one millisecond below the boundary;
+- elapsed time exactly at the boundary;
+- elapsed time one millisecond after the boundary;
+- a timestamp that moves backwards.
 
-- What state must be remembered?
-- Should time enter the core as a timestamp value or through a clock port?
-- What happens at exactly the cooldown boundary?
-- What evidence should represent a suppressed event?
-- Does suppression count as success, failure, or a separate outcome?
+Then verify each prediction in `tests/test_core.c`.
 
-Do not implement until these questions have explicit answers.
+## Exercise 8 — State Versus Evidence Failure
 
-## Exercise 8 — Write Tests First
+A successful deterrent action updates cooldown state before success evidence is
+recorded.
 
-Before implementing cooldown, write a table of cases such as:
+Explain why this matters when the evidence sink returns an error.
 
-| Previous accepted event | New event | Expected decision |
-| --- | --- | --- |
-| none | t=100 | allow |
-| t=100 | t=101 | suppress |
-| t=100 | exact boundary | define explicitly |
-| t=100 | after boundary | allow |
+Then find the test proving that a following event inside cooldown is suppressed
+rather than causing a duplicate deterrent action.
 
-The precise numbers are less important than defining the boundary.
-
-This exercise introduces test-driven design without requiring a framework.
+This exercise distinguishes domain state from observability/telemetry state.
 
 ## Exercise 9 — Separate Proof Layers
 
