@@ -5,6 +5,7 @@
 
 struct motion_event {
     uint64_t sequence;
+    uint64_t observed_at_ms;
     const char *source;
 };
 
