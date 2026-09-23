@@ -22,6 +22,30 @@ The project is designed to teach and preserve evidence for:
 - provenance and immutable evidence;
 - virtual-first development before hardware purchases.
 
+## Learning Track
+
+This repository is also a guided engineering lab for junior developers.
+
+Recommended order:
+
+1. [Learning Path](docs/learning-path.md) — follow the milestones and understand what each validation layer proves.
+2. [Architecture Guide](docs/architecture.md) — map ports, adapters, contracts, core logic, tests, and Yocto integration to concrete files.
+3. [Junior Engineering Exercises](docs/exercises.md) — predict behavior, trace failures, classify boundaries, and design the next milestone before changing code.
+
+The intended learning loop is:
+
+```text
+read the contract
+-> predict behavior
+-> inspect tests
+-> run host validation
+-> inspect packaging
+-> validate the target when required
+-> record exactly what was proved
+```
+
+The next recommended functional lesson is **M0.7: deterministic reactive behavior / cooldown**, still virtual-first and hardware-independent.
+
 ## Virtual-First Principle
 
 Cat Couch Guardian validates software boundaries in a virtual target before
@@ -118,12 +142,16 @@ The following remain intentionally out of scope for M0.6:
 │   ├── src/                                  Application and adapters
 │   ├── tests/                                Deterministic host tests
 │   └── packaging/systemd/                    systemd unit installed by Yocto
+├── docs/                                     Guided learning material
+│   ├── learning-path.md                      Milestone-based study path
+│   ├── architecture.md                       Ports/adapters and proof boundaries
+│   └── exercises.md                          Hands-on junior engineering exercises
 ├── meta-cat-guardian/                        Yocto layer
 │   ├── conf/layer.conf                       Wrynose-compatible layer config
 │   ├── recipes-apps/cat-guardian/            Application recipe and source archive
 │   └── recipes-core/images/                  Derived image recipe
 ├── LICENSE                                   Repository MIT license
-└── README.md                                 Public project documentation
+└── README.md                                 Project entry point
 ```
 
 Raw build products, Yocto workspaces, downloads, caches, experiments, local
