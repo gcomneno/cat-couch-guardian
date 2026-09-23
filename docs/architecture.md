@@ -1,5 +1,7 @@
 # Architecture Guide
 
+[English](architecture.md) | [Italiano](it/architecture.md)
+
 This guide explains the current M0.6 design as an engineering exercise.
 
 ## 1. Start From the Behavior

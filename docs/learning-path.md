@@ -1,5 +1,7 @@
 # Learning Path
 
+[English](learning-path.md) | [Italiano](it/learning-path.md)
+
 Cat Couch Guardian is a small embedded Linux project designed to be read in layers.
 
 The recommended way to study it is not to start from Yocto or from hardware. Start from the behavior, identify the contracts, run the host checks, and only then follow the same behavior into packaging and the target image.
