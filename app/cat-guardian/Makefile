@@ -38,8 +38,11 @@ test: $(TEST)
 	$(TEST)
 
 check: all test
-	test "$$($(APP))" = \
-		"evidence type=deterrent-request trigger=motion source=simulated sequence=1"
+	EXPECTED="$$(printf '%s\n' \
+		'evidence type=deterrent-request trigger=motion source=simulated sequence=1' \
+		'evidence type=motion-suppressed reason=cooldown source=simulated sequence=2 observed-at-ms=1001' \
+		'evidence type=deterrent-request trigger=motion source=simulated sequence=3')"; \
+	test "$$($(APP))" = "$$EXPECTED"
 
 clean:
 	rm -rf $(BUILD_DIR)

@@ -49,7 +49,7 @@ read the contract
 -> record exactly what was proved
 ```
 
-The next recommended functional lesson is **M0.7: deterministic reactive behavior / cooldown**, still virtual-first and hardware-independent.
+M0.7 adds the first explicit stateful lesson: deterministic cooldown decisions, still virtual-first and hardware-independent.
 
 ## Virtual-First Principle
 
@@ -61,24 +61,25 @@ speakers, or networking.
 
 ## Current Maturity
 
-M0.6 host behavior is implemented and verified. M0.5 remains the frozen
-previous milestone.
+M0.7 host behavior, immutable source packaging, and qemuarm64 recipe build are
+implemented and verified. M0.6 remains the frozen previous milestone.
 
-The implemented M0.6 flow is:
+The implemented M0.7 flow is:
 
 ```text
 SimulatedMotionSource
--> motion event
--> hardware-independent core
--> semantic deterrent request
--> simulated deterrent sink
--> deterministic evidence
+-> motion event + deterministic timestamp
+-> hardware-independent cooldown state
+-> allow: semantic deterrent request -> simulated deterrent sink -> success evidence
+-> suppress: no deterrent request -> suppression evidence
 ```
 
 The exact output is:
 
 ```text
 evidence type=deterrent-request trigger=motion source=simulated sequence=1
+evidence type=motion-suppressed reason=cooldown source=simulated sequence=2 observed-at-ms=1001
+evidence type=deterrent-request trigger=motion source=simulated sequence=3
 ```
 
 The core remains hardware-independent. It expresses a semantic deterrent
@@ -119,14 +120,13 @@ The verified runtime result was:
 
 ## Current Exclusions
 
-The following remain intentionally out of scope for M0.6:
+The following remain intentionally out of scope for M0.7:
 
 - GPIO;
 - physical PIR;
 - real audio;
 - speaker;
 - debounce;
-- cooldown;
 - persistent loop;
 - camera;
 - computer vision;
@@ -273,10 +273,10 @@ release preparation. The public archive is regenerated from the distributable
 `app/cat-guardian` tree, includes the MIT license, and has its own recipe
 checksum.
 
-## M0.6 Source Archive
+## M0.7 Source Archive
 
-The Yocto source archive for M0.6 is generated directly from the committed
-`app/cat-guardian` tree at host checkpoint `2050fea`.
+The Yocto source archive for M0.7 is generated directly from the committed
+`app/cat-guardian` tree at host checkpoint `ffcb37f`.
 
 This excludes host build products and unrelated working-tree state by
 construction.
@@ -287,10 +287,16 @@ Previous pinned public archive:
 71c4bea0fedea64c6c0b833a0d2c657eb5a81651287443115211f9ec0598d138
 ```
 
-M0.6 pinned archive:
+Previous M0.6 pinned archive:
 
 ```text
 b7fcd728404145305b8bb1a198441b1827a2ed83547736031e8d4381a3e964d5
+```
+
+M0.7 pinned archive:
+
+```text
+9d45b2bb42bb17efd8b51f0aaf398c771e5d9d50ba7b27a1dc8cc5f0c789b26f
 ```
 
 The Yocto recipe pins this exact SHA-256 identity.
@@ -301,7 +307,7 @@ Physical actuation remains future work. A later adapter may use audio or
 another actuator, but that implementation choice remains outside the semantic
 `deterrent_sink` contract.
 
-M0.6 itself remains simulated, educational, and hardware-free.
+M0.7 itself remains simulated, educational, and hardware-free.
 
 ## License
 

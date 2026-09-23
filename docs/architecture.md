@@ -162,7 +162,32 @@ The important cases are:
 
 A junior engineer should be able to explain why each test exists before modifying the implementation.
 
-## 8. Yocto Boundary
+## 8. M0.7 Stateful Policy
+
+M0.7 adds `struct cat_guardian_state` to make state ownership explicit.
+
+The core now receives `motion_event.observed_at_ms` as deterministic input.
+It does not call a clock API. This makes every boundary case directly testable.
+
+Cooldown decision:
+
+```text
+no previous successful deterrent -> allow
+elapsed < cooldown_ms           -> suppress
+elapsed == cooldown_ms          -> allow
+elapsed > cooldown_ms           -> allow
+time regression                 -> reject
+```
+
+Suppression is a semantic outcome represented by `struct motion_suppression`.
+It produces evidence through `record_motion_suppression` and never calls the
+deterrent port.
+
+State advances only after the deterrent port succeeds. It advances before
+success evidence is recorded because evidence failure does not undo an action
+that already happened.
+
+## 9. Yocto Boundary
 
 The Yocto layer is not part of the domain logic.
 

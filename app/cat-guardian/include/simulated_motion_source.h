@@ -7,6 +7,7 @@
 
 int simulated_motion_source_emit(
     uint64_t sequence,
+    uint64_t observed_at_ms,
     motion_event_handler handler,
     void *context
 );

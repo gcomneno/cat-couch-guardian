@@ -162,7 +162,34 @@ I casi importanti sono:
 
 Un junior engineer dovrebbe saper spiegare perché esiste ciascun test prima di modificare l'implementazione.
 
-## 8. Confine Yocto
+## 8. Policy stateful M0.7
+
+M0.7 aggiunge `struct cat_guardian_state` per rendere esplicita la proprietà
+dello stato.
+
+Il core ora riceve `motion_event.observed_at_ms` come input deterministico.
+Non chiama API di clock. Questo rende direttamente testabile ogni caso di
+confine.
+
+Decisione di cooldown:
+
+```text
+no previous successful deterrent -> allow
+elapsed < cooldown_ms           -> suppress
+elapsed == cooldown_ms          -> allow
+elapsed > cooldown_ms           -> allow
+time regression                 -> reject
+```
+
+La soppressione è un outcome semantico rappresentato da
+`struct motion_suppression`. Produce evidence attraverso
+`record_motion_suppression` e non chiama mai la deterrent port.
+
+Lo stato avanza soltanto dopo il successo della deterrent port. Avanza prima
+della registrazione della success evidence perché un errore di evidence non
+annulla un'azione che è già avvenuta.
+
+## 9. Confine Yocto
 
 Il layer Yocto non fa parte della logica di dominio.
 
