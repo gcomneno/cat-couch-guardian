@@ -1,11 +1,16 @@
 # Cat Couch Guardian
 
+[English](README.md) | [Italiano](README.it.md)
+
 Cat Couch Guardian is a public educational embedded Linux project. It is a
 virtual-first learning project using C, Yocto, systemd, and QEMU ARM64.
 
 The cat-deterrent scenario is a learning vehicle. This repository is not a
 finished physical product, a commercial product, or a hardware validation
 claim.
+
+English is the canonical documentation language. See the
+[documentation language policy](docs/documentation-policy.md).
 
 ## Educational Objectives
 
@@ -145,13 +150,16 @@ The following remain intentionally out of scope for M0.6:
 ├── docs/                                     Guided learning material
 │   ├── learning-path.md                      Milestone-based study path
 │   ├── architecture.md                       Ports/adapters and proof boundaries
-│   └── exercises.md                          Hands-on junior engineering exercises
+│   ├── exercises.md                          Hands-on junior engineering exercises
+│   ├── documentation-policy.md               Bilingual documentation contract
+│   └── it/                                   Maintained Italian mirrors
 ├── meta-cat-guardian/                        Yocto layer
 │   ├── conf/layer.conf                       Wrynose-compatible layer config
 │   ├── recipes-apps/cat-guardian/            Application recipe and source archive
 │   └── recipes-core/images/                  Derived image recipe
+├── scripts/check_documentation.py            Bilingual documentation validator
 ├── LICENSE                                   Repository MIT license
-└── README.md                                 Project entry point
+└── README.md                                 Canonical English project entry point
 ```
 
 Raw build products, Yocto workspaces, downloads, caches, experiments, local
@@ -179,6 +187,17 @@ verifies the exact application output:
 ```text
 evidence type=deterrent-request trigger=motion source=simulated sequence=1
 ```
+
+## Documentation Check
+
+Run the bilingual documentation gate with:
+
+```sh
+python3 scripts/check_documentation.py
+```
+
+The gate verifies required English/Italian pairs, reciprocal language selectors,
+same-language navigation for maintained documents, and relative links.
 
 ## Yocto Layer and Image
 
