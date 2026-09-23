@@ -95,36 +95,32 @@ Specifica soltanto:
 
 Poi spiega perché nessuno di questi dettagli appartiene a `deterrent_request.h`.
 
-## Esercizio 7 — Progetta il cooldown M0.7
+## Esercizio 7 — Leggi il contratto di cooldown M0.7
 
-Il comportamento attuale può richiedere deterrenza per ogni motion event accettato.
+Ispeziona `struct cat_guardian_state`, `motion_event.observed_at_ms` e
+`cat_guardian_handle_motion()`.
 
-Progetta una regola di cooldown deterministica.
+Prima di leggere i test, prevedi l'outcome per:
 
-Domande di esempio:
+- nessuna deterrenza precedente;
+- elapsed time un millisecondo sotto il confine;
+- elapsed time esattamente al confine;
+- elapsed time un millisecondo dopo il confine;
+- un timestamp che torna indietro.
 
-- Quale stato deve essere ricordato?
-- Il tempo dovrebbe entrare nel core come valore timestamp o attraverso una clock port?
-- Cosa succede esattamente al confine del cooldown?
-- Quale evidence dovrebbe rappresentare un evento soppresso?
-- La soppressione conta come successo, errore o outcome separato?
+Poi verifica ogni previsione in `tests/test_core.c`.
 
-Non implementare finché queste domande non hanno risposte esplicite.
+## Esercizio 8 — Stato rispetto a errore di evidence
 
-## Esercizio 8 — Scrivi prima i test
+Un'azione di deterrenza riuscita aggiorna lo stato del cooldown prima che venga
+registrata la success evidence.
 
-Prima di implementare il cooldown, scrivi una tabella di casi come:
+Spiega perché questo conta quando l'evidence sink restituisce un errore.
 
-| Previous accepted event | New event | Expected decision |
-| --- | --- | --- |
-| none | t=100 | allow |
-| t=100 | t=101 | suppress |
-| t=100 | exact boundary | define explicitly |
-| t=100 | after boundary | allow |
+Poi trova il test che prova che un evento successivo dentro il cooldown viene
+soppresso invece di provocare una deterrenza duplicata.
 
-I numeri precisi sono meno importanti della definizione del confine.
-
-Questo esercizio introduce il test-driven design senza richiedere un framework.
+Questo esercizio distingue lo stato di dominio dallo stato di osservabilità/telemetria.
 
 ## Esercizio 9 — Separa i livelli di prova
 
