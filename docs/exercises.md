@@ -1,5 +1,7 @@
 # Junior Engineering Exercises
 
+[English](exercises.md) | [Italiano](it/exercises.md)
+
 These exercises are designed to be solved by reading, predicting, testing, and only then modifying code.
 
 ## Exercise 1 — Trace One Event
